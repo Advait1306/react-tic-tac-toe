@@ -11,7 +11,7 @@ import './index.css';
 //FEATURE TODO:
 //1. [ ] Display location of each move using row and col.
 //2. [ ] Bold the currently selected item in a move.
-//3. [ ] Use loops to store board state instead of hardcoding it.
+//3. [-] Use loops to store board state instead of hardcoding it.
 //4. [-] Option to sort moves in ascending and descending order.
 //5. [-] Highlight the winning squares.
 //6. [-] Display a draw message when no one wins. 
@@ -43,6 +43,7 @@ class Board extends React.Component {
         }
     }
 
+ 
 
     renderSquare(i, winner) {
         return (
@@ -54,35 +55,19 @@ class Board extends React.Component {
     }
 
     render() {
-
-        // let rows = []
-
-
-        // for (let i = 0; i < 3; i++) {
-        //     let row = [];
-        //     for (let j = 0; j < 3; j++) {
-        //         row.push(this.renderSquare(0, this.props.winner))
-        //     }
-        //     rows.push(row)
-        // }
-
+        
         return (
             <div>
-                <div className="board-row">
-                    {this.renderSquare(0, this.props.winner)}
-                    {this.renderSquare(1, this.props.winner)}
-                    {this.renderSquare(2, this.props.winner)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(3, this.props.winner)}
-                    {this.renderSquare(4, this.props.winner)}
-                    {this.renderSquare(5, this.props.winner)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(6, this.props.winner)}
-                    {this.renderSquare(7, this.props.winner)}
-                    {this.renderSquare(8, this.props.winner)}
-                </div> 
+                {
+                    Array(3).fill(1).map((_, i) => (
+                            <div className="board-row">
+                                {this.renderSquare(0 + i*3, this.props.winner)}
+                                {this.renderSquare(1 + i*3, this.props.winner)}
+                                {this.renderSquare(2 + i*3, this.props.winner)}
+                            </div>
+                        
+                    ))
+                }
             </div>
         );
     }
@@ -154,7 +139,7 @@ class Game extends React.Component {
         } else {
             status = `Next player: ${this.state.xIsNext ? "X" : "O"}`;
         }
-        
+
         let moves = history.map((step, move) => {
             const desc = move ?
                 'Go to move #' + move :
@@ -167,7 +152,7 @@ class Game extends React.Component {
             );
         })
 
-        if(this.state.reverse){
+        if (this.state.reverse) {
             moves.reverse()
         }
 
@@ -178,9 +163,9 @@ class Game extends React.Component {
                 </div>
                 <div className="game-info">
                     <div>{status}</div>
-                    <button onClick = {() => {
+                    <button onClick={() => {
                         this.setState({
-                            reverse : !this.state.reverse
+                            reverse: !this.state.reverse
                         })
                     }}> {this.state.reverse ? 'Ascending' : 'Descending'}  </button>
                     <ol>{moves}</ol>
