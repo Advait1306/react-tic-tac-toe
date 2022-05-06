@@ -12,7 +12,7 @@ import './index.css';
 //1. [ ] Display location of each move using row and col.
 //2. [ ] Bold the currently selected item in a move.
 //3. [ ] Use loops to store board state instead of hardcoding it.
-//4. [ ] Option to sort moves in ascending and descending order.
+//4. [-] Option to sort moves in ascending and descending order.
 //5. [-] Highlight the winning squares.
 //6. [-] Display a draw message when no one wins. 
 
@@ -97,7 +97,8 @@ class Game extends React.Component {
                 squares: Array(9).fill(null)
             }],
             stepNumber: 0,
-            xIsNext: true
+            xIsNext: true,
+            reverse: false,
         }
 
         this.handleClick = this.handleClick.bind(this)
@@ -153,8 +154,8 @@ class Game extends React.Component {
         } else {
             status = `Next player: ${this.state.xIsNext ? "X" : "O"}`;
         }
-
-        const moves = history.map((step, move) => {
+        
+        let moves = history.map((step, move) => {
             const desc = move ?
                 'Go to move #' + move :
                 'Go to game start';
@@ -166,6 +167,10 @@ class Game extends React.Component {
             );
         })
 
+        if(this.state.reverse){
+            moves.reverse()
+        }
+
         return (
             <div className="game">
                 <div className="game-board">
@@ -173,6 +178,11 @@ class Game extends React.Component {
                 </div>
                 <div className="game-info">
                     <div>{status}</div>
+                    <button onClick = {() => {
+                        this.setState({
+                            reverse : !this.state.reverse
+                        })
+                    }}> {this.state.reverse ? 'Ascending' : 'Descending'}  </button>
                     <ol>{moves}</ol>
                 </div>
             </div>
@@ -205,7 +215,3 @@ function calculateWinner(squares) {
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(<Game />);
 
-
-
-// eslint-disable-next-line
-                { }
