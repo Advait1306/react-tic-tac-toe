@@ -9,7 +9,7 @@ import './index.css';
 //    recommended method.
 
 //FEATURE TODO:
-//1. [ ] Display location of each move using row and col.
+//1. [-] Display location of each move using row and col.
 //2. [ ] Bold the currently selected item in a move.
 //3. [-] Use loops to store board state instead of hardcoding it.
 //4. [-] Option to sort moves in ascending and descending order.
@@ -81,6 +81,7 @@ class Game extends React.Component {
             history: [{
                 squares: Array(9).fill(null)
             }],
+            selected: [],
             stepNumber: 0,
             xIsNext: true,
             reverse: false,
@@ -98,6 +99,12 @@ class Game extends React.Component {
 
     handleClick(i) {
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
+        let selected;
+        if(this.state.selected.length === 0){
+            selected = this.state.selected.slice();
+        }else{
+            selected = this.state.selected.slice(0, this.state.stepNumber);
+        }
         const current = history[history.length - 1];
         const squares = current.squares.slice()
 
@@ -111,6 +118,7 @@ class Game extends React.Component {
                 squares: squares,
             }]),
             stepNumber: history.length,
+            selected: selected.concat([i]),
             //incorrect way of accessing previous state
             xIsNext: !this.state.xIsNext
         })
@@ -132,6 +140,8 @@ class Game extends React.Component {
 
         let status;
 
+        console.log(this.state.selected)
+
         if (winner) {
             status = `Winner: ${winner[3]}`
         } else if (this.checkComplete(current.squares)) {
@@ -142,7 +152,7 @@ class Game extends React.Component {
 
         let moves = history.map((step, move) => {
             const desc = move ?
-                'Go to move #' + move :
+                'Go to move #' + move + ` where ${this.state.selected[move-1] + 1} was selected`:
                 'Go to game start';
 
             return (
